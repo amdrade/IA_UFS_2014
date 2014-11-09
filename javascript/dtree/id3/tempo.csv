@@ -1,0 +1,15 @@
+Aparencia,Temperatura,Umidade,Vento,Classe
+Sol,Quente,Alta,Nao,Ruim
+Sol,Quente,Alta,Sim,Ruim
+Encoberto,Quente,Alta,Nao,Bom
+Chuvoso,Agradavel,Alta,Nao,Bom
+Chuvoso,Frio,Normal,Nao,Bom
+Chuvoso,Frio,Normal,Sim,Ruim
+Encoberto,Frio,Normal,Nao,Bom
+Sol,Agradavel,Alta,Nao,Ruim
+Sol,Frio,Normal,Nao,Bom
+Chuvoso,Agradavel,Normal,Sim,Bom
+Sol,Agradavel,Normal,Sim,Bom
+Encoberto,Agradavel,Alta,Sim,Bom
+Encoberto,Quente,Normal,Nao,Bom
+Chuvoso,Agradavel,Alta,Sim,Ruim
