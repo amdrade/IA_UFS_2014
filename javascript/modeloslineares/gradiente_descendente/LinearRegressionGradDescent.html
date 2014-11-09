@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Gradiente Descendente Regressão Linear</title>
+	<style>
+	#teste{margin: 10px 0;}
+	</style>
+</head>
+<body>
+	<p>Selecione um arquivo no formato CSV. Primeira linha nomes dos atributos, demais linhas valores</p>
+	<input type="file" id="inputCSV" onchange="pegaCSV(this)">
+	<button id="treinar">Treinar</button>
+	<p>holdout 2/3 trieno e 1/3 teste</p>
+	<p id="saida"></p>
+	<div id="box-acao">
+		<button id="testar">Testar</button>
+	</div>
+	<textarea id="teste" cols="50" rows="10"></textarea>
+<p>#TODO calcular metricas</p>
+<script src="lib/jquery-1.11.1.min.js"></script>
+<script src="lib/adder.js"></script>
+<script src="lib/shuffle.js"></script>
+<script src="lib/MathLib.min.js"></script>
+<script src="gradiente-descendente.js"></script>
+
+</body>
+</html>
