@@ -1,4 +1,4 @@
-IA_UFS_2014
+IA UFS 2014.2
 ===========
 
-Implementações IA
+Implementações
