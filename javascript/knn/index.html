@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Knn</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<article>
+		<h3>Knn</h3>
+		<p id="status"></p>
+		<p>Selecione um arquivo</p>
+		<div><input type=file></div>
+		<div id="parametro_k">
+			<label for="k">Para K de: </label>
+			<input id="k" type="number" min="1" value="3" />
+			<label for="to_k">até: </label>
+			<input id="to_k" type="number" min="1" value="3" />
+			<label for="step_k">variando em: </label>
+			<input id="step_k" type="number" min="1" value="1" />
+		</div>
+		<div id="acoes">
+			<button id="btn-classificar">Classificar</button>
+		</div>
+	</article>
+	<div id="box-canvas">
+		<div>
+			<div id="lineLegend"></div>
+			<canvas id="canvas" height="400" width="600"></canvas>
+		</div>
+	</div>
+	<script src="lib/shuffle.js"></script>
+	<script src="lib/Chart.min.js"></script>
+	<script src="lib/legend.js"></script>
+	<script src="knn.js"></script>
+	<script>
+		var upload = document.getElementsByTagName('input')[0],
+			state = document.getElementById('status');
+		var	dataSet = [], registros = [];
+
+		if (typeof window.FileReader === 'undefined') {
+			state.className = 'fail';
+			state.innerHTML = 'File API & FileReader não suportados';
+		}
+
+		upload.onchange = function (e) {
+			e.preventDefault();
+
+			var file = upload.files[0],
+				reader = new FileReader();
+			reader.onload = function (event) {
+				lerArquivo(event);
+			};
+			reader.readAsText(file);
+			return false;
+		};
+
+		function lerArquivo (evt) {
+			var fileArr = evt.target.result.split('\n');
+			//console.log("Lendo arquivo ... .. .");
+			var linha = fileArr[0].trim();
+			for (var i = 1, length = fileArr.length; i < length; i++) {
+				linha = fileArr[i].trim();
+				if (linha.length > 0) {
+					dataSet.push(linha.split(','));
+				};
+			};
+			registros = holdout(dataSet);
+		}
+
+		function draw (registros) {
+
+			var labels = [], data = [];
+			for (x in registros){
+				labels.push(registros[x].k);
+				data.push(registros[x].acc);
+			}
+
+			var lineChartData = {
+				labels : labels,
+				datasets : [
+					{
+						label: "k x acurácia",
+						strokeColor : "rgba(91, 144, 191,1)",
+						pointColor : "rgba(91, 144, 191,1)",
+						pointStrokeColor : "#fff",
+						pointHighlightFill : "#f00",
+						pointHighlightStroke : "rgba(220,220,220,1)",
+						data : data
+					}
+				]
+
+			}
+
+			if (window.grafico !== undefined){
+				grafico.destroy();
+			}
+			var ctx = document.getElementById("canvas").getContext("2d");
+			window.grafico = new Chart(ctx).Line(lineChartData, {
+				responsive: true,
+				scaleIntegersOnly: false,
+				datasetFill: false
+			});
+			legend(document.getElementById("lineLegend"), lineChartData);
+		}
+
+		function init() {
+
+			var btn = document.getElementById('btn-classificar');
+			btn.addEventListener("click", function(e){
+				var k = +document.getElementById("k").value;
+				var to_k = +document.getElementById("to_k").value;
+				var step_k = +document.getElementById("step_k").value;
+				var vp = 0;
+				if (dataSet.length === 0){
+					alert("Selecione um arquivo primeiro");
+					return false;
+				}
+
+				if (to_k < k){
+					alert("Intervalo incorreto!");
+					return false;
+				}
+
+				var ldi = registros.teste[0].length;
+				var grafico = [];
+				for (var j = k; j <= to_k; j += step_k){
+					vp = 0;
+					for (i in registros.teste){
+						var pontoI = registros.teste[i].slice(0, ldi - 1);
+						var predita = classificar(pontoI,j,registros.treino);
+						if (registros.teste[i][ldi - 1] === predita ){
+							vp++;
+						}
+						console.info("Classe original: " + registros.teste[i][ldi - 1] + " Classe predita: " + predita);
+					}
+					var acc = vp/registros.teste.length;
+					grafico.push({
+						k:j,
+						acc: acc
+					});
+					console.log("Acuracia para k = "+j+ " : " + acc);
+				}
+				console.log(grafico);
+				draw(grafico);
+			});
+			console.info("Knn");
+		}
+
+		window.onload = function run(){
+			init();
+		}
+
+		</script>
+</body>
+</html>
