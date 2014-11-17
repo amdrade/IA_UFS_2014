@@ -11,6 +11,9 @@
 		<p id="status"></p>
 		<p>Selecione um arquivo</p>
 		<div><input type=file></div>
+		<div>
+			<input type="checkbox" id="dataset_nominal" name="dataset_nominal"><label for="dataset_nominal">Atributos nominais</label>
+		</div>
 		<div id="parametro_k">
 			<label for="k">Para K de: </label>
 			<input id="k" type="number" min="1" value="3" />
@@ -37,7 +40,7 @@
 		var upload = document.getElementsByTagName('input')[0],
 			state = document.getElementById('status');
 		var	dataSet = [], registros = [];
-
+		var nominal = false;
 		if (typeof window.FileReader === 'undefined') {
 			state.className = 'fail';
 			state.innerHTML = 'File API & FileReader não suportados';
@@ -56,6 +59,7 @@
 		};
 
 		function lerArquivo (evt) {
+			dataSet = [];
 			var fileArr = evt.target.result.split('\n');
 			//console.log("Lendo arquivo ... .. .");
 			var linha = fileArr[0].trim();
@@ -112,6 +116,7 @@
 				var to_k = +document.getElementById("to_k").value;
 				var step_k = +document.getElementById("step_k").value;
 				var vp = 0;
+				nominal = document.getElementById("dataset_nominal").checked;
 				if (dataSet.length === 0){
 					alert("Selecione um arquivo primeiro");
 					return false;

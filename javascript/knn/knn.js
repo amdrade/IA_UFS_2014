@@ -49,9 +49,19 @@ function distanciaEuclidiana(pontoA,pontoB) {
 	var sum = 0,
 		n = pontoA.length;
 	for (var i = 0; i < n; i++){
-		sum += Math.pow(pontoA[i] - pontoB[i],2);
+		sum += Math.pow((+pontoA[i]) - (+pontoB[i]),2);
 	}
 	return Math.sqrt(sum);
+}
+
+function distanciaAtributosNominais(pontoA,pontoB) {
+	var sum = 0,
+		n = pontoA.length;
+	for (var i = 0; i < n; i++){
+		sum += pontoA[i] === pontoB[i] ? 0 : 1;
+		//sum += Math.pow(pontoA[i] - pontoB[i],2);
+	}
+	return sum;
 }
 
 function calcularDistancias(pontoN,data) {
@@ -59,8 +69,9 @@ function calcularDistancias(pontoN,data) {
 	//console.info("Calulando distancias ... .. .");
 	for (var i = 0; i < n; i++){
 		var pontoA = data[i].slice(0, ldi - 1);
+		var dist = nominal ? distanciaAtributosNominais(pontoA, pontoN) : distanciaEuclidiana(pontoA, pontoN);
 		distancias.push({
-			distancia: distanciaEuclidiana(pontoA, pontoN),
+			distancia: dist,
 			classe: data[i][ldi - 1]
 		});
 	}
