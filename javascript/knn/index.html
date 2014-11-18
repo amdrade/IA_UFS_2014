@@ -12,15 +12,15 @@
 		<p>Selecione um arquivo</p>
 		<div><input type=file></div>
 		<div>
-			<input type="checkbox" id="dataset_nominal" name="dataset_nominal"><label for="dataset_nominal">Atributos nominais</label>
+			<input type="checkbox" id="dataset_nominal" name="dataset_nominal"><label for="dataset_nominal">Base com apenas atributos categóricos</label>
 		</div>
 		<div id="parametro_k">
 			<label for="k">Para K de: </label>
-			<input id="k" type="number" min="1" value="3" />
+			<input id="k" type="number" min="1" value="1" />
 			<label for="to_k">até: </label>
-			<input id="to_k" type="number" min="1" value="3" />
+			<input id="to_k" type="number" min="1" value="11" />
 			<label for="step_k">variando em: </label>
-			<input id="step_k" type="number" min="1" value="1" />
+			<input id="step_k" type="number" min="2" value="2" step="2" />
 		</div>
 		<div id="acoes">
 			<button id="btn-classificar">Classificar</button>

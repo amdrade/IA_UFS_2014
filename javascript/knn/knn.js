@@ -33,7 +33,7 @@ function getMostCommon(list){
 }
 
 function holdout(registros) {
-
+	//1/3 para teste e 2/3 para treino
 	registros = shuffle(registros);
 	var nTreino = Math.ceil(registros.length/3)*2;
 	var dataSetTreino = registros.slice(0,nTreino);
@@ -47,20 +47,20 @@ function holdout(registros) {
 
 function distanciaEuclidiana(pontoA,pontoB) {
 	var sum = 0,
-		n = pontoA.length;
-	for (var i = 0; i < n; i++){
-		sum += Math.pow((+pontoA[i]) - (+pontoB[i]),2);
+		q = pontoA.length;
+	for (var i = 0; i < q; i++){
+		sum += Math.pow((+pontoA[i]) - (+pontoB[i]),q);
 	}
-	return Math.sqrt(sum);
+	return Math.pow(sum, 1/q);
 }
 
-function distanciaAtributosNominais(pontoA,pontoB) {
+function distanciaAtributosCategoricos(pontoA,pontoB) {
 	var sum = 0,
 		n = pontoA.length;
 	for (var i = 0; i < n; i++){
 		sum += pontoA[i] === pontoB[i] ? 0 : 1;
-		//sum += Math.pow(pontoA[i] - pontoB[i],2);
 	}
+
 	return sum;
 }
 
@@ -69,7 +69,7 @@ function calcularDistancias(pontoN,data) {
 	//console.info("Calulando distancias ... .. .");
 	for (var i = 0; i < n; i++){
 		var pontoA = data[i].slice(0, ldi - 1);
-		var dist = nominal ? distanciaAtributosNominais(pontoA, pontoN) : distanciaEuclidiana(pontoA, pontoN);
+		var dist = nominal ? distanciaAtributosCategoricos(pontoA, pontoN) : distanciaEuclidiana(pontoA, pontoN);
 		distancias.push({
 			distancia: dist,
 			classe: data[i][ldi - 1]
