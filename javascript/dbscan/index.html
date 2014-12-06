@@ -9,6 +9,7 @@
 <body>
 	<div class="container">
 		<p>Algoritmo DBSCAN</p>
+		<p>Selecione um arquivo .csv, configure os valores de minPts e eps e click em Run, mais detalhes do resultado são mostrados no console do navegador.</p>
 		<input type="file" id="csv">
 		<label for="minPts">minPts</label>
 		<input type="number" id="minPts" name="minPts" min="1" value="1">
@@ -25,10 +26,11 @@
 
 	window.onload = function run(){
 		upload("csv");
-		var agrupamento = [];
-		var config = {};
 		var btn = document.getElementById("run");
 			btn.addEventListener("click", function(eve){
+			var agrupamento = [];
+			var pontosPlot = [];
+			var config = {};
 			if (dataSet.length == 0){
 				alert("Selecione um arquivo primeiro");
 				return false;
@@ -41,7 +43,7 @@
 			agrupamento = new DBSCAN(config);
 			var c = agrupamento.run(dataSet);
 			agrupamento.logCluters(c);
-			var pontosPlot = agrupamento.data;
+			pontosPlot = agrupamento.data;
 
 			c.forEach(function(cluster_idx,i){
 				pontosPlot[i].cluster = cluster_idx;
