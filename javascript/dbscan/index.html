@@ -17,7 +17,7 @@
 		<input type="number" id="eps" name="eps" min="1" value="1">
 		<button id="run">Run</button>
 	</div>
-	<svg id="visualisation" width="1000" height="500"></svg>
+
 
 	<script src="comum.js" ></script>
 	<script src="d3.min.js" ></script>
@@ -48,6 +48,10 @@
 			c.forEach(function(cluster_idx,i){
 				pontosPlot[i].cluster = cluster_idx;
 			});
+			d3.select("#grafico").remove();
+			d3.select("body")
+				.append("svg").attr("id", "grafico").
+				attr("width", "1000").attr("height", "500");
 
 			plot(pontosPlot);
 		});
@@ -56,12 +60,12 @@
 //http://www.sitepoint.com/creating-simple-line-bar-charts-using-d3-js/
 function plot(pontosPlot) {
 
-	var vis = d3.select("#visualisation"),
+	var vis = d3.select("#grafico"),
 	WIDTH = 1000,
 	HEIGHT = 500,
 	MARGINS = {
 		top: 20,
-		right: 20,
+		right: 70,
 		bottom: 20,
 		left: 50
 	},
@@ -106,6 +110,10 @@ function plot(pontosPlot) {
 	xRange.domain(d3.extent(pontosPlot, function(d) { return d.c[0]; })).nice();
 	yRange.domain(d3.extent(pontosPlot, function(d) { return d.c[1]; })).nice();
 
+	var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 	vis.selectAll(".dot")
 		.data(pontosPlot)
 		.enter().append("circle")
@@ -113,7 +121,20 @@ function plot(pontosPlot) {
 		.attr("r", 3.5)
 		.attr("cx", function(d) { return xRange(d.c[0]); })
 		.attr("cy", function(d) { return yRange(d.c[1]); })
-		.style("fill", function(d,i) { return color(d.cluster); });
+		.style("fill", function(d,i) { return color(d.cluster); })
+		.on("mouseover", function(d) {
+        	div.transition()
+            	.duration(200)
+            	.style("opacity", .9);
+        	div.html("["+d.c[0] + ", "  + d.c[1] + "]")
+				.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 18) + "px");
+		})
+		.on("mouseout", function(d) {
+			div.transition()
+				.duration(500)
+				.style("opacity", 0);
+		});
 
 	var legend = vis.selectAll(".legend")
 		.data(color.domain())
