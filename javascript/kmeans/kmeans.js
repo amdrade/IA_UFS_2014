@@ -1,14 +1,4 @@
-var dataset = [[1,0],[2,1],[0,0],[0,2]];
-var aCentroide1 = [[2,0],[-1,0]];
-var aCentroide2 = [[-1,0],[2,2]];
-var k = 2;
-var MAXINTERACAO = 1000;
-
-kmeans(k,dataset,aCentroide1,"canvas1");
-kmeans(k,dataset,aCentroide2,"canvas2");
-
-//canvas apenas local onde vai desenha resultados
-function kmeans (k,dataset,aCentroide,canvas) {
+function kmeans (k,dataset,aCentroide) {
 	var fDataset = inicializarDataset(dataset);
 	var i = 0;
 	do {
@@ -20,14 +10,16 @@ function kmeans (k,dataset,aCentroide,canvas) {
 		i++;
 	}while(c.mudou || i == MAXINTERACAO)
 
-	draw(canvas,fDataset,aCentroide);
+	window.centroidePlot = aCentroide;
+	window.dataPlot = fDataset;
+
 }
 
 function inicializarDataset (data) {
 	var dataset = [];
 	for (j in data){
 		var instacia = {
-			caracteristicas : data[j],
+			caracteristicas : data[j].map(function(n){return +n}),
 			cluster : -1
 		}
 		dataset.push(instacia);
@@ -61,9 +53,9 @@ function formarCluster(data,k,aCentroide) {
 			aCluster[cluster] = [ponto];
 		else
 			aCluster[cluster].push(ponto);
-		console.log("Instacia [" + ponto + "] cluster " + cluster);
+
+		console.log("Instacia [" + ponto + "] cluster " + (+cluster+1));
 	}
-	//console.log(aCluster,data);
 
 	return {'data' : data, 'mudou': mudou, 'clusters' : aCluster};
 }
@@ -74,7 +66,9 @@ function distanciaEuclidiana(pontoA,pontoB) {
 	for (var i = 0; i < q; i++){
 		sum += Math.pow((+pontoA[i]) - (+pontoB[i]),q);
 	}
-	return Math.pow(sum, 1/q);
+	var dist = Math.pow(sum, 1/q);
+	//console.log("Distância entre "+pontoA+" e "+pontoB+" = " + dist);
+	return dist;
 }
 
 
@@ -106,7 +100,7 @@ function calcularCentroide (cluster) {
 	novoCentroide = novoCentroide.map(function(num){
 		return num/n;
 	});
-	console.log("Novo centroide: ", novoCentroide);
+	console.log("Novo centroide: "+ novoCentroide);
 	return novoCentroide;
 
 }

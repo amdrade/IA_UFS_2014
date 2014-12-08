@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
 	<meta charset="UTF-8">
 	<title>K-means</title>
@@ -7,17 +7,67 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-	<div class="canvas-wrap">
-		<p>Centros [2,0],[-1,0]</p>
-		<input type="text" id="c1">
-		<canvas id="canvas1" width="400" height="400"></canvas>
+	<div class="container">
+		<p>Algoritmo K-means</p>
+		<p>Selecione um arquivo .csv, configure o valor de k e os centroides, click em Run para executar o algoritmo, mais detalhes do resultado são mostrados no console do navegador.</p>
+		<input type="file" id="csv">
+		<p><label for="k">valor de k</label>
+		<input type="number" id="k" name="k" min="1" ></p>
+		<p><label for="centroide">Centroides</label></p>
+		<textarea name="centroide" id="centroide" cols="30" rows="10" placeholder="1,2
+4,6"></textarea>
+		<p><button id="run">Run</button></p>
 	</div>
-	<div class="canvas-wrap">
-		<p>Centros [-1,0],[2,2]</p>
-		<canvas id="canvas2" width="400" height="400"></canvas>
-	</div>
 
-	<script src="kmeans.js" ></script>
+	<script src="comum.js"></script>
+	<script src="d3.min.js"></script>
+	<script src="kmeans.js"></script>
+	<script>
+
+	window.onload = function (){
+		upload("csv");
+
+		var btn = document.getElementById('run');
+		btn.addEventListener("click", function(e){
+			if (dataSet.length == 0){
+				alert("Selecione um arquivo primeiro");
+				return false;
+			}
+
+			var aCentroide = [];
+
+			var centroide = document.getElementById("centroide").value.split('\n');
+			var k = +document.getElementById("k").value;
+
+			if (centroide.length !== k){
+				alert("Valor de K e número de centroide informados são diferentes");
+				return false;
+			}
+
+			for(var i = 0; i<k; i++){
+				var linha = centroide[i].trim();
+				aCentroide.push(linha.split(",").map(function(num){return +num}));
+			}
+
+			kmeans(k,dataSet,aCentroide);
+
+			d3.select("#grafico").remove();
+			d3.select("body")
+				.append("svg").attr("id", "grafico").
+				attr("width", "1000").attr("height", "500");
+
+			if (aCentroide[0].length === 2)
+				plot(dataPlot,centroidePlot);
+			else {
+				d3.select("#grafico").append("text")
+					.attr("x", 580)
+					.attr("y", 9)
+					.attr("dy", ".35em")
+					.style("text-anchor", "middle")
+					.text("Ops!! Número de dimensões incompatível.Os resultados podem ser vistos no console, precione F12 para abri-lo");
+			}
+		});
+	}
+	</script>
 </body>
 </html>

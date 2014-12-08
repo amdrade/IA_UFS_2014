@@ -35,3 +35,20 @@ div {
 	width: 50%;
 	margin: 0 auto;
 }
+#k{width: 100px;}
+.axis path, .axis line{fill: none;stroke: #777;shape-rendering: crispEdges;}
+.axis text{font-family: 'Arial';font-size: 13px;}
+.tick{stroke-dasharray: 1, 2;}
+.bar{fill: FireBrick;}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  height: 18px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  padding: 4px 7px;
+  pointer-events: none;
+}
